@@ -36,12 +36,16 @@
                     <div class="form-group" v-for="(question, index) in clarificationQuestions" :key="index">
                         <label :for="'answer-' + index">{{ question }}</label>
                         <input :id="'answer-' + index" class="form-control" v-model="answers[index]">
+                        <div class="form-check">
+                            <input type="checkbox" :id="'skip-' + index" class="form-check-input" v-model="skipped[index]">
+                            <label :for="'skip-' + index" class="form-check-label">Skip</label>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary mt-4">Get solutions</button>
                 </form>
                 <div v-if="solution" class="mt-4">
                     <h2>Solution:</h2>
-                    <p>{{ solution }}</p>
+                    <div v-html="renderedSolution"></div>
                 </div>
             </div>
         </div>
@@ -53,11 +57,13 @@
                 problemDescription: '',
                 clarificationQuestions: [],
                 answers: [],
-                solution: ''
+                skipped:[],
+                solution: '',
+                renderedSolution: ''
             },
             methods: {
                 getClarification: function() {
-                    axios.post('http://127.0.0.1:5000/api/v1/consultant/clarify', {
+                    axios.post('/api/v1/consultant/clarify', {
                         'problem-description': this.problemDescription
                     })
                     .then(response => {
@@ -69,18 +75,23 @@
                     });
                 },
                 getSolutions: function() {
-                    axios.post('http://127.0.0.1:5000/api/v1/consultant/solve', {
+                    var self = this;
+                    var filtered_answers = [];
+                    for (var i = 0; i < self.clarificationQuestions.length; i++) {
+                        if (!self.skipped[i]) {
+                            filtered_answers.push({
+                                'question': self.clarificationQuestions[i],
+                                'answer': self.answers[i]
+                            });
+                        }
+                    }
+                    axios.post('/api/v1/consultant/solve', {
                         'problem-description': this.problemDescription,
-                        'clarification-answers': this.clarificationQuestions.map((question, index) => {
-                            return {
-                                'question': question,
-                                'answer': this.answers[index]
-                            };
-                        })
+                        'clarification-answers': filtered_answers
                     })
                     .then(response => {
                         this.solution = response.data.solution;
-                        self.renderedSolution = marked(self.solution);
+                        self.renderedSolution = marked.parse(self.solution);
                     })
                     .catch(error => {
                         console.log(error);
