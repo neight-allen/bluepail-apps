@@ -8,7 +8,7 @@ class Consultant():
 Tavita is a consultant. She is a detail oriented, experienced, empathetic, genius solver of problems. She is meeting with a client who is facing a problem. Here is their conversation:
 
 Client: {{problem_description}}.
-{% for item in qs_and_as %}
+{% for item in clarification_answers %}
 Tavita: {{ item.question }}
 Client: {{ item.answer }}
 {% endfor %}
@@ -22,7 +22,7 @@ Tavita writes up a report with the following summary of the client's problem, al
 
 One of her clients is facing a problem. Here is how they describe the problem to Tavita: "{problem_description}".
 
-As an expert, Tavita knows that the client may not have given her all the information she needs to solve the problem. So she asks the following clarifying questions, formatted here as a bulled list:
+As an expert, Tavita knows that the client may not have given her all the information she needs to solve the problem. So she asks exactly three clarifying questions, formatted here as a bulled list:
 
 - """
 
@@ -32,7 +32,7 @@ As an expert, Tavita knows that the client may not have given her all the inform
     )
 
     solution_prompt = PromptTemplate.from_template(
-        # input_variables=["qs_and_as","problem_statement","number_of_solutions"], 
+        # input_variables=["clarification_answers","problem_statement","number_of_solutions"], 
         template=solution_prompt_template, template_format="jinja2"
     )
 
@@ -42,6 +42,17 @@ As an expert, Tavita knows that the client may not have given her all the inform
         result = self.llm(formatted_clarification_prompt)
         print(result)
         return [s.strip() for s in result.split("- ")]
+
+    def get_solution(self, problem_description, clarification_answers, number_of_solutions):
+        formatted_solution_prompt = self.solution_prompt.format(
+            problem_description=problem_description,
+            clarification_answers=clarification_answers,
+            number_of_solutions=number_of_solutions
+        )
+        print(formatted_solution_prompt)
+        result = self.llm(formatted_solution_prompt)
+        print(result)
+        return result
 
 if __name__ == "__main__":
     # Code to run if this file is being executed
