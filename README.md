@@ -7,7 +7,10 @@ Brainstorm is a Flask app that provides a natural language interface for solving
 To install Brainstorm, clone the repository and install the dependencies using pip:
 
 ```
-git clone https://github.com/username/brainstorm.git cd brainstorm pip install -r requirements.txt
+git clone https://github.com/neight-allen/bluepail-apps/
+cd bluepail-apps
+python -m venv venv #if you'd like to work in a virtual environment
+pip install -r requirements.txt
 ```
 
 ## Usage

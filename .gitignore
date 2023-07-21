@@ -8,6 +8,7 @@ __pycache__/
 
 # Python Virtual environment
 /venv
+.env
 
 # IDEs and editors
 .vscode/

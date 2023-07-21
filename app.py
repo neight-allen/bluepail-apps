@@ -1,8 +1,14 @@
+import os
+import logging
 from flask import Flask
 from flask import request, jsonify
 from brainstorm.main import Consultant
 
+
 app = Flask(__name__, static_folder='static')
+
+log_level = os.environ.get('LOG_LEVEL', 'INFO')
+logging.basicConfig(level=log_level)
 
 
 @app.route('/api/v1/consultant/clarify', methods=['POST'])

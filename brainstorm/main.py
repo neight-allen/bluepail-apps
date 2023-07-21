@@ -1,5 +1,7 @@
+import logging
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
+
 
 
 class Consultant():
@@ -36,30 +38,31 @@ As an expert, Tavita knows that the client may not have given her all the inform
         template=solution_prompt_template, template_format="jinja2"
     )
     fewer_tokens = False
+    logger = logging.getLogger(__name__)
 
     def get_clarification(self, problem_description):
         formatted_clarification_prompt = self.clarification_prompt.format(problem_description=problem_description)
-        print(formatted_clarification_prompt)
+        self.logger.debug(formatted_clarification_prompt)
         if(self.fewer_tokens):
             result = " Just one quesiton for you.\n- Ok, two."
         else:
             result = self.llm(formatted_clarification_prompt)
-        print(result)
+        self.logger.debug(result)
         return [s.strip() for s in result.split("- ")]
 
     def get_solution(self, problem_description, clarification_answers, number_of_solutions):
-        print("clarification_answers:", clarification_answers)
+        self.logger.debug("clarification_answers:", clarification_answers)
         formatted_solution_prompt = self.solution_prompt.format(
             problem_description=problem_description,
             clarification_answers=clarification_answers,
             number_of_solutions=number_of_solutions
         )
-        print(formatted_solution_prompt)
+        self.logger.debug(formatted_solution_prompt)
         if(self.fewer_tokens):
             result = "# Solution Report:\n\n## Problem statement: \n " + problem_description + "\n\n## Solutions: \n Just love yourself, and everything will be ok."
         else:
             result = self.llm(formatted_solution_prompt)
-        print(result)
+        self.logger.debug(result)
         return result
 
 if __name__ == "__main__":
