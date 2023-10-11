@@ -15,6 +15,11 @@ logging.basicConfig(level=log_level)
 
 @app.route("/api/v1/consultant/clarify", methods=["POST"])
 def get_clarification():
+    """
+    This method accepts a POST request with a JSON object containing a problem description.
+    It uses the Consultant class to generate a list of clarification questions based on the problem description.
+    It returns a JSON object containing the list of clarification questions.
+    """
     data = request.get_json()
     problem_description = data["problem-description"]
     consultant = Consultant()
@@ -24,6 +29,11 @@ def get_clarification():
 
 @app.route("/api/v1/consultant/solve", methods=["POST"])
 def get_solution():
+    """
+    This method accepts a POST request with a JSON object containing a problem description, clarification answers, and number of solutions.
+    It uses the Consultant class to generate a solution based on the problem description, clarification answers, and number of solutions.
+    It returns a JSON object containing the solution.
+    """
     data = request.get_json()
     problem_description = data["problem-description"]
     clarification_answers = data["clarification-answers"]
