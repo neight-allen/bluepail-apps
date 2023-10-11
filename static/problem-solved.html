@@ -1,104 +1,136 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Consultant</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        @media (max-width: 768px) {
-            .container-fluid {
-                padding: 0;
-            }
-            .row {
-                margin: 0;
-            }
-            .col-md-8 {
-                width: 100%;
-            }
+      @media (max-width: 768px) {
+        .container-fluid {
+          padding: 0;
         }
+        .row {
+          margin: 0;
+        }
+        .col-md-8 {
+          width: 100%;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="app" class="container-fluid mt-5 w-100 d-flex flex-column">
-        <div class="row justify-content-center flex-grow-1">
-            <div class="col-md-8">
-                <h1 class="text-center mb-4">Consultant</h1>
-                <form @submit.prevent="getClarification">
-                    <div class="form-group">
-                        <label for="problem-description">Problem description:</label>
-                        <textarea id="problem-description" class="form-control" v-model="problemDescription"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Continue</button>
-                </form>
-                <form v-if="clarificationQuestions.length > 0" @submit.prevent="getSolutions" class="mt-4">
-                    <div class="form-group" v-for="(question, index) in clarificationQuestions" :key="index">
-                        <label :for="'answer-' + index">{{ question }}</label>
-                        <input :id="'answer-' + index" class="form-control" v-model="answers[index]">
-                        <div class="form-check">
-                            <input type="checkbox" :id="'skip-' + index" class="form-check-input" v-model="skipped[index]">
-                            <label :for="'skip-' + index" class="form-check-label">Skip</label>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-4">Get solutions</button>
-                </form>
-                <div v-if="solution" class="mt-4">
-                    <h2>Solution:</h2>
-                    <div v-html="renderedSolution"></div>
-                </div>
+      <div class="row justify-content-center flex-grow-1">
+        <div class="col-md-8">
+          <h1 class="text-center mb-4">Consultant</h1>
+          <form @submit.prevent="getClarification">
+            <div class="form-group">
+              <label for="problem-description">Problem description:</label>
+              <textarea
+                id="problem-description"
+                class="form-control"
+                v-model="problemDescription"
+                title="Describe the problem you want to solve"
+              ></textarea>
             </div>
+            <button type="submit" class="btn btn-primary">Continue</button>
+          </form>
+          <form
+            v-if="clarificationQuestions.length > 0"
+            @submit.prevent="getSolutions"
+            class="mt-4"
+          >
+            <div
+              class="form-group"
+              v-for="(question, index) in clarificationQuestions"
+              :key="index"
+            >
+              <label :for="'answer-' + index">{{ question }}</label>
+              <input
+                :id="'answer-' + index"
+                class="form-control"
+                v-model="answers[index]"
+                title="Provide answer to the question"
+              />
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  :id="'skip-' + index"
+                  class="form-check-input"
+                  v-model="skipped[index]"
+                />
+                <label :for="'skip-' + index" class="form-check-label"
+                  >Skip</label
+                >
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">
+              Get solutions
+            </button>
+          </form>
+          <div v-if="solution" class="mt-4">
+            <h2>Solution:</h2>
+            <div v-html="renderedSolution"></div>
+          </div>
         </div>
+      </div>
     </div>
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                problemDescription: '',
-                clarificationQuestions: [],
-                answers: [],
-                skipped:[],
-                solution: '',
-                renderedSolution: ''
-            },
-            methods: {
-                getClarification: function() {
-                    axios.post('/api/v1/consultant/clarify', {
-                        'problem-description': this.problemDescription
-                    })
-                    .then(response => {
-                        this.clarificationQuestions = response.data.questions;
-                        this.answers = new Array(this.clarificationQuestions.length).fill('');
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                },
-                getSolutions: function() {
-                    var self = this;
-                    var filtered_answers = [];
-                    for (var i = 0; i < self.clarificationQuestions.length; i++) {
-                        if (!self.skipped[i]) {
-                            filtered_answers.push({
-                                'question': self.clarificationQuestions[i],
-                                'answer': self.answers[i]
-                            });
-                        }
-                    }
-                    axios.post('/api/v1/consultant/solve', {
-                        'problem-description': this.problemDescription,
-                        'clarification-answers': filtered_answers
-                    })
-                    .then(response => {
-                        this.solution = response.data.solution;
-                        self.renderedSolution = marked.parse(self.solution);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                }
+      new Vue({
+        el: "#app",
+        data: {
+          problemDescription: "",
+          clarificationQuestions: [],
+          answers: [],
+          skipped: [],
+          solution: "",
+          renderedSolution: "",
+        },
+        methods: {
+          getClarification: async function () {
+            try {
+              const response = await axios.post("/api/v1/consultant/clarify", {
+                "problem-description": this.problemDescription,
+              });
+              this.clarificationQuestions = response.data.questions;
+              this.answers = new Array(this.clarificationQuestions.length).fill(
+                "",
+              );
+            } catch (error) {
+              console.error(error);
+              alert(
+                "An error occurred while getting clarification. Please try again.",
+              );
             }
-        });
+          },
+          getSolutions: async function () {
+            try {
+              const filtered_answers = this.clarificationQuestions
+                .filter((question, index) => !this.skipped[index])
+                .map((question, index) => ({
+                  question,
+                  answer: this.answers[index],
+                }));
+              const response = await axios.post("/api/v1/consultant/solve", {
+                "problem-description": this.problemDescription,
+                "clarification-answers": filtered_answers,
+              });
+              this.solution = response.data.solution;
+              this.renderedSolution = marked.parse(this.solution);
+            } catch (error) {
+              console.error(error);
+              alert(
+                "An error occurred while getting solutions. Please try again.",
+              );
+            }
+          },
+        },
+      });
     </script>
-</body>
+  </body>
 </html>
