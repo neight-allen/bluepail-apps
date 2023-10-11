@@ -22,7 +22,7 @@ gha_enabled: True
 # Example:
 #
 # description: sweepai/sweep is a python project. The main api endpoints are in sweepai/api.py. Write code that adheres to PEP8.
-description: This is a python project. The main api endpoints are in app.py. We use Flask for backend and Vue.js for frontend.
+description: sweepai/sweep is a python project. The main api endpoints are in sweepai/api.py. Write code that adheres to PEP8.
 
 # This sets whether to create pull requests as drafts. If this is set to True, then all pull requests will be created as drafts and GitHub Actions will not be triggered.
 draft: False
@@ -37,15 +37,10 @@ blocked_dirs: []
 # docs:
 #   - PyGitHub: ["https://pygithub.readthedocs.io/en/latest/", "We use pygithub to interact with the GitHub API"]
 docs:
-  - Flask:
+  - PyGitHub:
       [
-        https://flask.palletsprojects.com/en/3.0.x/,
-        Our backend is based on Flask,
-      ]
-  - Vue.js:
-      [
-        https://vuejs.org/guide/introduction.html,
-        Our static frontend uses Vue.js,
+        https://pygithub.readthedocs.io/en/latest/,
+        We use pygithub to interact with the GitHub API,
       ]
 
 # Sandbox executes commands in a sandboxed environment to validate code changes after every edit to guarantee pristine code. For more details, see the [Sandbox](./sandbox) page.
