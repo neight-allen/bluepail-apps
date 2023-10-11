@@ -3,15 +3,16 @@
 
 # This setting contains a list of rules that Sweep will check for. If any of these rules are broken in a new commit, Sweep will create an pull request to fix the broken rule.
 rules:
- - "All docstrings and comments should be up to date."
- - "There should be no commented out code."
- - "All error logs should use traceback during exceptions."
- - "There should be no debug log or print statements in production code."
- - "There should be no instances of `import pdb; pdb.set_trace()` in production code."
- - "Code should adhere to PEP 8 style guidelines."
+  - All docstrings and comments should be up to date.
+  - There should be no commented out code.
+  - All error logs should use traceback during exceptions.
+  - There should be no debug log or print statements in production code.
+  - There should be no instances of `import pdb; pdb.set_trace()` in production code.
+  - Code should adhere to PEP 8 style guidelines.
+  - All routes should be defined in app.py, not in subfolders or modules.
 
 # This is the branch that Sweep will develop from and make pull requests to. Most people use 'main' or 'master' but some users also use 'dev' or 'staging'.
-branch: 'main'
+branch: main
 
 # By default Sweep will read the logs and outputs from your existing Github Actions. To disable this, set this to false.
 gha_enabled: True
@@ -21,7 +22,7 @@ gha_enabled: True
 # Example:
 #
 # description: sweepai/sweep is a python project. The main api endpoints are in sweepai/api.py. Write code that adheres to PEP8.
-description: ''
+description: This is a python project. The main api endpoints are in app.py. We use Flask for backend and Vue.js for frontend.
 
 # This sets whether to create pull requests as drafts. If this is set to True, then all pull requests will be created as drafts and GitHub Actions will not be triggered.
 draft: False
@@ -36,8 +37,16 @@ blocked_dirs: []
 # docs:
 #   - PyGitHub: ["https://pygithub.readthedocs.io/en/latest/", "We use pygithub to interact with the GitHub API"]
 docs:
-  - Flask: ["https://flask.palletsprojects.com/en/3.0.x/", "Our backend is based on Flask"]
-  - Vue.js: ["https://vuejs.org/guide/introduction.html", "Our static frontend uses Vue.js"]
+  - Flask:
+      [
+        https://flask.palletsprojects.com/en/3.0.x/,
+        Our backend is based on Flask,
+      ]
+  - Vue.js:
+      [
+        https://vuejs.org/guide/introduction.html,
+        Our static frontend uses Vue.js,
+      ]
 
 # Sandbox executes commands in a sandboxed environment to validate code changes after every edit to guarantee pristine code. For more details, see the [Sandbox](./sandbox) page.
 sandbox:
