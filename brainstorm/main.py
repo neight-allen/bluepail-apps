@@ -1,6 +1,6 @@
 import logging
 
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template, request
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 
@@ -63,7 +63,7 @@ As an expert, Tavita knows that the client may not have given her all the inform
         if self.fewer_tokens:
             result = " Just one quesiton for you.\n- Ok, two."
         else:
-            result = self.llm(formatted_clarification_prompt)
+            result = self.llm.generate(formatted_clarification_prompt)
         self.logger.debug(result)
         return [s.strip() for s in result.split("- ")]
 
@@ -108,12 +108,30 @@ As an expert, Tavita knows that the client may not have given her all the inform
                 + "\n\n## Solutions: \n Just love yourself, and everything will be ok."
             )
         else:
-            result = self.llm(formatted_solution_prompt)
+            result = self.llm.generate(formatted_solution_prompt)
         self.logger.debug(result)
         return result
 
 
 app = Flask(__name__)
+
+
+@app.route("/get_clarification", methods=["POST"])
+def get_clarification():
+    problem_description = request.json["problem_description"]
+    return jsonify(consultant.get_clarification(problem_description))
+
+
+@app.route("/get_solution", methods=["POST"])
+def get_solution():
+    problem_description = request.json["problem_description"]
+    clarification_answers = request.json["clarification_answers"]
+    number_of_solutions = request.json["number_of_solutions"]
+    return jsonify(
+        consultant.get_solution(
+            problem_description, clarification_answers, number_of_solutions
+        )
+    )
 
 
 @app.route("/docs")
