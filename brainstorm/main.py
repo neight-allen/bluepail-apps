@@ -125,8 +125,9 @@ if __name__ == "__main__":
     # Code to run if this file is being executed
     consultant = Consultant()
 
-    print(
-        consultant.get_clarification(
-            "I need to market an upcoming conference. I have been involved in conference organizing before, and have a functional network of locals that would be interested, but I'm not very good at marketing. The conference would be a hackathon style weekend for buliding generative AI applications"
-        )
-    )
+    problem_description = "I need to market an upcoming conference. I have been involved in conference organizing before, and have a functional network of locals that would be interested, but I'm not very good at marketing. The conference would be a hackathon style weekend for buliding generative AI applications"
+    clarification_answers = consultant.get_clarification(problem_description)
+    print(clarification_answers)
+
+    solution = consultant.get_solution(problem_description, clarification_answers, 1)
+    print(solution)
