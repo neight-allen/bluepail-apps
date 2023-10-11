@@ -66,6 +66,7 @@ Brainstorm provides a REST API for accessing its functionality. The following en
         "number-of-solutions": 3
     }
     ```
+  - Note: The `number-of-solutions` field is optional and defaults to 3.
   - Example Response:
     ```
     {
@@ -77,24 +78,6 @@ Brainstorm provides a REST API for accessing its functionality. The following en
     }
     ```
 
-Both endpoints accept POST requests with JSON data in the following format:
-
-```
-{
-    "problem-description": "A description of the problem.",
-    "clarification-answers": [
-        {
-            "question": "Clarification question",
-            "answer": "Answer to question 1."
-        },
-        {...},
-        ...
-    ],
-    "number-of-solutions": 3
-}
-```
-
-The `number-of-solutions` field is optional and defaults to 3.
 
 ## License
 
