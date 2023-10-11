@@ -1,11 +1,13 @@
 import logging
 import os
 
-from flask import Flask, jsonify, render_template, request
+from flasgger import Swagger
+from flask import Flask, jsonify, request
 
 from brainstorm.main import Consultant
 
 app = Flask(__name__, static_folder="static")
+swagger = Swagger(app)
 
 log_level = os.environ.get("LOG_LEVEL", "INFO")
 logging.basicConfig(level=log_level)
@@ -31,11 +33,6 @@ def get_solution():
         problem_description, clarification_answers, number_of_solutions
     )
     return jsonify({"solution": solution})
-
-
-@app.route("/docs")
-def docs():
-    return render_template("swaggerui.html")
 
 
 if __name__ == "__main__":
