@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Swagger UI</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('flasgger.static', filename='css/typography.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('flasgger.static', filename='css/reset.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('flasgger.static', filename='css/screen.css') }}"
+    />
+  </head>
+  <body>
+    <div class="swagger-section">
+      <div id="header">
+        <div class="swagger-ui-wrap">
+          <a id="logo" href="#">swagger</a>
+          <form id="api_selector">
+            <div class="input">
+              <input
+                placeholder="http://example.com/api"
+                id="input_baseUrl"
+                name="baseUrl"
+                type="text"
+              />
+            </div>
+            <div id="auth_container"></div>
+            <div class="input">
+              <a id="explore" class="header__btn" href="#" data-sw-translate
+                >Explore</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="message-bar" class="swagger-ui-wrap" data-sw-translate>
+        &nbsp;
+      </div>
+      <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+    </div>
+    <script src="{{ url_for('flasgger.static', filename='lib/jquery-1.8.0.min.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/jquery.slideto.min.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/jquery.wiggle.min.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/jquery.ba-bbq.min.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/handlebars-2.0.0.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/underscore-min.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/backbone-min.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='swagger-ui.min.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/highlight.9.1.0.pack.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/highlight.9.1.0.pack_extended.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/jsoneditor.min.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/marked.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lib/swagger-oauth.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lang/translator.js') }}"></script>
+    <script src="{{ url_for('flasgger.static', filename='lang/en.js') }}"></script>
+    <script type="text/javascript">
+      $(function () {
+        window.swaggerUi = new SwaggerUi({
+          url: "{{ url_for('flasgger.spec') }}",
+          dom_id: "swagger-ui-container",
+          supportedSubmitMethods: ["get", "post", "put", "delete", "patch"],
+          onComplete: function (swaggerApi, swaggerUi) {
+            if (typeof initOAuth == "function") {
+              initOAuth({
+                clientId: "your-client-id",
+                clientSecret: "your-client-secret-if-required",
+                realm: "your-realms",
+                appName: "your-app-name",
+                scopeSeparator: ",",
+              });
+            }
+            $("pre code").each(function (i, e) {
+              hljs.highlightBlock(e);
+            });
+          },
+          onFailure: function (data) {
+            log("Unable to Load SwaggerUI");
+          },
+          docExpansion: "none",
+          jsonEditor: false,
+          defaultModelRendering: "schema",
+          showRequestHeaders: false,
+        });
+        window.swaggerUi.load();
+      });
+    </script>
+  </body>
+</html>
