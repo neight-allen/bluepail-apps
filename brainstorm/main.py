@@ -34,7 +34,11 @@ As an expert, Tavita knows that the client may not have given her all the inform
     )
 
     solution_prompt = PromptTemplate.from_template(
-        # input_variables=["clarification_answers","problem_statement","number_of_solutions"],
+        input_variables=[
+            "problem_description",
+            "clarification_answers",
+            "number_of_solutions",
+        ],
         template=solution_prompt_template,
         template_format="jinja2",
     )
