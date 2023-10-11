@@ -28,7 +28,54 @@ This will start the Flask development server on port 5000. You can access the ap
 Brainstorm provides a REST API for accessing its functionality. The following endpoints are available:
 
 - `/api/v1/consultant/clarify`: Generates clarification questions for a given problem description.
+  - Example Payload:
+    ```
+    {
+        "problem-description": "I'm having trouble understanding recursion in programming."
+    }
+    ```
+  - Example Response:
+    ```
+    {
+        "questions": [
+            "What part of recursion do you find most confusing?",
+            "Have you tried solving problems using recursion?",
+            "Do you understand the concept of a base case in recursion?"
+        ]
+    }
+    ```
 - `/api/v1/consultant/solve`: Generates solutions for a given problem description and set of clarification answers.
+  - Example Payload:
+    ```
+    {
+        "problem-description": "I'm having trouble understanding recursion in programming.",
+        "clarification-answers": [
+            {
+                "question": "What part of recursion do you find most confusing?",
+                "answer": "I don't understand how the function calls itself without causing an infinite loop."
+            },
+            {
+                "question": "Have you tried solving problems using recursion?",
+                "answer": "Yes, but I always end up with stack overflow errors."
+            },
+            {
+                "question": "Do you understand the concept of a base case in recursion?",
+                "answer": "I think so, it's the condition that stops the recursion, right?"
+            }
+        ],
+        "number-of-solutions": 3
+    }
+    ```
+  - Example Response:
+    ```
+    {
+        "solutions": [
+            "Try visualizing the recursion with a diagram or a stack of cards to understand how it works.",
+            "Practice with simple problems first, like calculating factorial or fibonacci numbers using recursion.",
+            "Remember to always define a base case that will stop the recursion. Without it, you will indeed get an infinite loop and a stack overflow error."
+        ]
+    }
+    ```
 
 Both endpoints accept POST requests with JSON data in the following format:
 
