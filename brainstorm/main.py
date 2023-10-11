@@ -112,6 +112,12 @@ As an expert, Tavita knows that the client may not have given her all the inform
         return result
 
 
+from flask import render_template
+
+@app.route('/docs')
+def docs():
+    return render_template('swaggerui.html')
+
 if __name__ == "__main__":
     # Code to run if this file is being executed
     consultant = Consultant()
