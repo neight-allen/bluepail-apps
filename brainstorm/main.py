@@ -1,5 +1,6 @@
 import logging
 
+from flask import Flask, render_template
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 
@@ -112,11 +113,13 @@ As an expert, Tavita knows that the client may not have given her all the inform
         return result
 
 
-from flask import render_template
+app = Flask(__name__)
 
-@app.route('/docs')
+
+@app.route("/docs")
 def docs():
-    return render_template('swaggerui.html')
+    return render_template("swaggerui.html")
+
 
 if __name__ == "__main__":
     # Code to run if this file is being executed
