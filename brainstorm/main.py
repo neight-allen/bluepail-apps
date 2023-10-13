@@ -67,8 +67,8 @@ As an expert, Tavita knows that the client may not have given her all the inform
         self, problem_description, clarification_answers, number_of_solutions
     ):
         """
-        Get solution for the problem description.
-
+        Get solution for the problem description. This method uses the OpenAI language model to generate a solution based on the problem description and clarification answers.
+        
         Parameters:
         problem_description (str): The problem description.
         clarification_answers (list): The clarification answers.
