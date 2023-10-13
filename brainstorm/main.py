@@ -6,7 +6,7 @@ from langchain.prompts import PromptTemplate
 
 class Consultant:
     """
-    A class to represent a consultant who solves problems.
+    The Consultant class is responsible for problem-solving and generating solutions. It uses the OpenAI language model to generate clarifications and solutions based on the problem description and clarification answers.
     """
 
     solution_prompt_template = """
@@ -44,7 +44,7 @@ As an expert, Tavita knows that the client may not have given her all the inform
 
     def get_clarification(self, problem_description):
         """
-        Get clarification for the problem description.
+        Generates clarifying questions for the given problem description using the OpenAI language model. Returns a list of clarifying questions.
 
         Parameters:
         problem_description (str): The problem description.
@@ -67,7 +67,7 @@ As an expert, Tavita knows that the client may not have given her all the inform
         self, problem_description, clarification_answers, number_of_solutions
     ):
         """
-        Get solution for the problem description.
+        Generates a solution for the given problem description, clarification answers, and the number of solutions using the OpenAI language model. Returns the solution as a string.
 
         Parameters:
         problem_description (str): The problem description.
