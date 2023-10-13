@@ -55,7 +55,7 @@ Brainstorm provides a REST API for accessing its functionality. The following en
         ]
     }
     ```
-- `/api/v1/consultant/solve`: Generates solutions for a given problem description and set of clarification answers.
+- `/api/v1/consultant/solve`: Generates solutions for a given problem description and set of clarification answers. The `number-of-solutions` field is mandatory and determines the number of solutions that the API will return.
   - Example Payload:
     ```
     {
