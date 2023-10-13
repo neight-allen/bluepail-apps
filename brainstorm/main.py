@@ -5,6 +5,10 @@ from langchain.prompts import PromptTemplate
 
 
 class Consultant:
+    """
+    A class to represent a consultant who solves problems.
+    """
+
     solution_prompt_template = """
 Tavita is a consultant. She is a detail oriented, experienced, empathetic, genius solver of problems. She is meeting with a client who is facing a problem. Here is their conversation:
 
@@ -83,6 +87,7 @@ As an expert, Tavita knows that the client may not have given her all the inform
         except Exception as e:
             self.logger.error(f"Error in get_solution: {e}")
             return ""
+
 
 
 if __name__ == "__main__":
