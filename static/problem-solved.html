@@ -103,9 +103,23 @@
               );
             } catch (error) {
               console.error(error);
-              alert(
-                "An error occurred while getting clarification. Please try again.",
-              );
+              if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                alert(
+                  "An error occurred while getting clarification. Server responded with status: " + error.response.status
+                );
+              } else if (error.request) {
+                // The request was made but no response was received
+                alert(
+                  "An error occurred while getting clarification. No response received from server."
+                );
+              } else {
+                // Something happened in setting up the request that triggered an Error
+                alert(
+                  "An error occurred while getting clarification. Please try again."
+                );
+              }
             }
           },
           getSolutions: async function () {
@@ -124,9 +138,19 @@
               this.renderedSolution = marked.parse(this.solution);
             } catch (error) {
               console.error(error);
-              alert(
-                "An error occurred while getting solutions. Please try again.",
-              );
+              if (error.response) {
+                alert(
+                  "An error occurred while getting solutions. Server responded with status: " + error.response.status
+                );
+              } else if (error.request) {
+                alert(
+                  "An error occurred while getting solutions. No response received from server."
+                );
+              } else {
+                alert(
+                  "An error occurred while getting solutions. Please try again."
+                );
+              }
             }
           },
         },
