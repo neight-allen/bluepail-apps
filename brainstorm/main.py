@@ -1,3 +1,4 @@
+# This is the version of the code from commit 5efb4653ad104a5fdf9bd261001823d379b4af4a
 import logging
 
 from langchain.llms import OpenAI
