@@ -77,7 +77,7 @@ Brainstorm provides a REST API for accessing its functionality. The following en
         "number-of-solutions": 3
     }
     ```
-    
+
   - Example Response:
     ```
     {
@@ -90,10 +90,6 @@ Brainstorm provides a REST API for accessing its functionality. The following en
     ```
 
 The `number-of-solutions` field is now mandatory and must be provided in the request.
-
-## New Features
-
-Error handling has been added to the `get_clarification` and `get_solution` methods. If an error occurs while generating the clarification questions or solutions, an error message will be logged and an empty list or string will be returned, respectively.
 
 ## License
 
