@@ -55,7 +55,7 @@ Brainstorm provides a REST API for accessing its functionality. The following en
         ]
     }
     ```
-- `/api/v1/consultant/solve`: Generates solutions for a given problem description and set of clarification answers.
+- `/api/v1/consultant/solve`: Generates solutions for a given problem description and set of clarification answers. The `number-of-solutions` field is mandatory and determines the number of solutions that the API will return.
   - Example Payload:
     ```
     {
@@ -77,7 +77,7 @@ Brainstorm provides a REST API for accessing its functionality. The following en
         "number-of-solutions": 3
     }
     ```
-  - Note: The `number-of-solutions` field is optional and defaults to 3.
+
   - Example Response:
     ```
     {
@@ -89,6 +89,7 @@ Brainstorm provides a REST API for accessing its functionality. The following en
     }
     ```
 
+The `number-of-solutions` field is now mandatory and must be provided in the request.
 
 ## License
 

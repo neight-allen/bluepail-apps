@@ -1,3 +1,4 @@
+# This is the version of the code from commit 5efb4653ad104a5fdf9bd261001823d379b4af4a
 import logging
 
 from langchain.llms import OpenAI
@@ -31,7 +32,7 @@ As an expert, Tavita knows that the client may not have given her all the inform
 
 - """
 
-    llm = OpenAI(temperature=0.9)
+    language_model = OpenAI(temperature=0.9)
     clarification_prompt = PromptTemplate(
         input_variables=["problem_description"], template=clarification_prompt_template
     )
@@ -42,66 +43,55 @@ As an expert, Tavita knows that the client may not have given her all the inform
     fewer_tokens = False
     logger = logging.getLogger(__name__)
 
-    def get_clarification(self, problem_description):
-        """
-        Get clarification for the problem description.
+    def format_clarification_prompt(self, problem_description):
+        return self.clarification_prompt.format(problem_description=problem_description)
 
-        Parameters:
-        problem_description (str): The problem description.
-
-        Returns:
-        list: A list of clarifications.
-        """
-        formatted_clarification_prompt = self.clarification_prompt.format(
-            problem_description=problem_description
-        )
-        self.logger.info(formatted_clarification_prompt)
-        if self.fewer_tokens:
-            result = " Just one question for you.\n- Ok, two."
-        else:
-            result = self.llm(formatted_clarification_prompt)
-        self.logger.info(result)
-        return [s.strip() for s in result.split("- ")]
-
-    def get_solution(
+    def format_solution_prompt(
         self, problem_description, clarification_answers, number_of_solutions
     ):
-        """
-        Get solution for the problem description.
-
-        Parameters:
-        problem_description (str): The problem description.
-        clarification_answers (list): The clarification answers.
-        number_of_solutions (int): The number of solutions.
-
-        Returns:
-        str: The solution.
-        """
-        self.logger.info("clarification_answers: %s", clarification_answers)
-        formatted_solution_prompt = self.solution_prompt.format(
+        return self.solution_prompt.format(
             problem_description=problem_description,
             clarification_answers=clarification_answers,
             number_of_solutions=number_of_solutions,
         )
-        self.logger.info(formatted_solution_prompt)
-        if self.fewer_tokens:
+
+    def get_clarification(self, problem_description):
+        try:
+            formatted_clarification_prompt = self.format_clarification_prompt(
+                problem_description
+            )
+            result = (
+                " Just one question for you.\n- Ok, two."
+                if self.fewer_tokens
+                else self.language_model(formatted_clarification_prompt)
+            )
+            return [s.strip() for s in result.split("- ")]
+        except Exception as e:
+            self.logger.error(f"Error in get_clarification: {e}")
+            return []
+
+    def get_solution(
+        self, problem_description, clarification_answers, number_of_solutions
+    ):
+        try:
+            formatted_solution_prompt = self.format_solution_prompt(
+                problem_description, clarification_answers, number_of_solutions
+            )
             result = (
                 "# Solution Report:\n\n## Problem statement: \n "
                 + problem_description
                 + "\n\n## Solutions: \n Just love yourself, and everything will be ok."
+                if self.fewer_tokens
+                else self.language_model(formatted_solution_prompt)
             )
-        else:
-            result = self.llm(formatted_solution_prompt)
-        self.logger.info(result)
-        return result
+            return result
+        except Exception as e:
+            self.logger.error(f"Error in get_solution: {e}")
+            return ""
+
 
 
 if __name__ == "__main__":
-    # Code to run if this file is being executed
     consultant = Consultant()
-
-    print(
-        consultant.get_clarification(
-            "I need to market an upcoming conference. I have been involved in conference organizing before, and have a functional network of locals that would be interested, but I'm not very good at marketing. The conference would be a hackathon style weekend for buliding generative AI applications"
-        )
-    )
+    problem_description = "I need to market an upcoming conference. I have been involved in conference organizing before, and have a functional network of locals that would be interested, but I'm not very good at marketing. The conference would be a hackathon style weekend for building generative AI applications"
+    print(consultant.get_clarification(problem_description))
