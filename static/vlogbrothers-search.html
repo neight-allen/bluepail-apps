@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Find a Vlogbrothers Videos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        @media (max-width: 768px) {
+            .container-fluid {
+                padding: 0;
+            }
+            .row {
+                margin: 0;
+            }
+            .col-md-8 {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <h1>Find a Vlogbrothers Video</h1>
+            <form @submit.prevent="fetchVideos">
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <select id="author" v-model="author" class="form-control">
+                        <option value="" selected>Either</option>
+                        <option value="john">John</option>
+                        <option value="hank">Hank</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="query">Tell me what you remember about the video you're looking for</label>
+                    <input id="query" v-model="query" type="text" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <ul class="list-group mt-4">
+                <li v-for="video in videos" class="list-group-item">
+                    <a :href="video.link" target="_blank">{{ video.title }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                author: 'Either',
+                query: '',
+                videos: []
+            },
+            methods: {
+                fetchVideos() {
+                    axios.post('/api/v1/vblookup/videos', {
+                        author: this.author,
+                        "query-text": this.query
+                    })
+                    .then(response => {
+                        this.videos = response.data.results;
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
