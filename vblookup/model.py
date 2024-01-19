@@ -4,6 +4,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.llms import OpenAI
+from langchain.prompts import PromptTemplate
 from pprint import pprint
 
 def get_client():
@@ -33,7 +34,12 @@ def determine_author(transcript):
   return "unknown"
 
 def llm_summary(transcript):
-  llm = OpenAI(temperature=0.9)
+    llm = OpenAI(temperature=0.9)
+    summary_prompt = PromptTemplate.from_template(
+        template="summary_prompt_template.jinja2",
+        template_format="jinja2"
+    )
+
 
 def fill_collection():
   # Scrape the last 100 videos from the Vlogbrothers channel
